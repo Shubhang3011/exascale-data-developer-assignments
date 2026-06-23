@@ -1,0 +1,33 @@
+# Carbon Emissions Reporting Platform -- single-service stack.
+#
+#   docker compose up --build
+#
+# Then open http://localhost:8000 (dashboard) and http://localhost:8000/docs
+# (interactive API). The SQLite database is created and seeded automatically on
+# first start; no external database container is required.
+
+services:
+  app:
+    build: .
+    image: carbon-emissions-platform:latest
+    container_name: carbon-emissions-platform
+    ports:
+      - "8000:8000"
+    environment:
+      # Unbuffered logging so startup/seed messages appear immediately.
+      PYTHONUNBUFFERED: "1"
+    # Optional: persist the seeded SQLite database across container restarts so
+    # any manually-created records or overrides survive. Comment out to get a
+    # freshly-seeded database on every `up`.
+    volumes:
+      - emissions-db:/app/backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request,sys; sys.exit(0) if urllib.request.urlopen('http://localhost:8000/api/health').status==200 else sys.exit(1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+volumes:
+  emissions-db:

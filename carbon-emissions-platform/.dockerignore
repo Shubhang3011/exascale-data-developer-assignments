@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+.gitattributes
+
+# Python caches / build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Virtual environments (image installs deps fresh from requirements.txt)
+.venv/
+venv/
+env/
+
+# Runtime SQLite database -- recreated and seeded inside the container
+*.db
+*.sqlite
+*.sqlite3
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs / local env
+*.log
+.env
+
+# Docker / docs that don't belong in the build context
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Node (frontend is static; no build step / deps)
+node_modules/

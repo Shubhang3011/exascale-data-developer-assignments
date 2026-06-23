@@ -1,0 +1,420 @@
+/* =========================================================================
+   Central Steel Plant - ESG Emissions Dashboard
+   Modern ESG look: cards, grid, green palette, responsive.
+   ========================================================================= */
+:root {
+  --green-900: #0f3d2e;
+  --green-800: #14532d;
+  --green-700: #15803d;
+  --green-600: #16a34a;
+  --green-500: #22c55e;
+  --green-400: #4ade80;
+  --green-100: #dcfce7;
+  --green-50:  #f0fdf4;
+
+  --teal-600:  #0d9488;
+  --amber-500: #f59e0b;
+  --red-500:   #ef4444;
+  --red-600:   #dc2626;
+
+  --ink-900: #0b1f17;
+  --ink-700: #29413a;
+  --ink-500: #5b716a;
+  --ink-400: #8499921a;
+
+  --bg:       #eef4f0;
+  --surface:  #ffffff;
+  --line:     #dde7e1;
+  --shadow:   0 1px 2px rgba(16, 40, 30, .06), 0 8px 24px rgba(16, 40, 30, .06);
+  --radius:   16px;
+  --radius-sm: 10px;
+
+  --font: "Segoe UI", system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink-900);
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+a { color: var(--green-700); }
+
+/* ---------------------------- Header ---------------------------- */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 28px;
+  background: linear-gradient(120deg, var(--green-900), var(--green-700) 70%, var(--teal-600));
+  color: #fff;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand-mark {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  background: rgba(255,255,255,.14);
+  border: 1px solid rgba(255,255,255,.25);
+  border-radius: 14px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+.brand-text h1 { margin: 0; font-size: 1.25rem; font-weight: 700; }
+.brand-text p { margin: 2px 0 0; font-size: .82rem; opacity: .85; }
+
+.header-controls { display: flex; align-items: center; gap: 12px; }
+.year-control { display: flex; flex-direction: column; gap: 3px; font-size: .72rem; text-transform: uppercase; letter-spacing: .6px; opacity: .95; }
+.year-control select {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.95);
+  color: var(--ink-900);
+  cursor: pointer;
+}
+
+/* ---------------------------- Buttons ---------------------------- */
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 9px 16px;
+  font-size: .9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform .06s ease, background .15s ease, box-shadow .15s ease;
+  font-family: inherit;
+}
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--green-600); color: #fff; }
+.btn-primary:hover { background: var(--green-700); }
+.btn-primary:disabled { background: #9ec9af; cursor: not-allowed; }
+.btn-ghost {
+  background: rgba(255,255,255,.16);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+}
+.btn-ghost:hover { background: rgba(255,255,255,.26); }
+.form-actions .btn-ghost { background: #eef2f0; color: var(--ink-700); border-color: var(--line); }
+.form-actions .btn-ghost:hover { background: #e2e9e5; }
+
+/* ---------------------------- Banners ---------------------------- */
+.banner {
+  margin: 12px 28px 0;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: .9rem;
+  font-weight: 500;
+}
+.banner-error { background: #fde8e8; color: var(--red-600); border: 1px solid #f6bcbc; }
+.banner-loading { background: var(--green-100); color: var(--green-800); border: 1px solid var(--green-400); }
+
+/* ---------------------------- Layout ---------------------------- */
+.layout {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 22px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ---------------------------- KPI cards ---------------------------- */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.kpi-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 18px 16px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 132px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: "";
+  position: absolute; inset: 0 auto 0 0;
+  width: 5px;
+  background: var(--green-500);
+}
+.kpi-primary::before { background: var(--green-700); }
+.kpi-intensity::before { background: var(--teal-600); }
+.kpi-label { font-size: .76rem; text-transform: uppercase; letter-spacing: .6px; color: var(--ink-500); font-weight: 600; }
+.kpi-value { font-size: 1.7rem; font-weight: 700; color: var(--ink-900); line-height: 1.15; word-break: break-word; }
+.kpi-primary .kpi-value { color: var(--green-800); }
+.kpi-sub { font-size: .78rem; color: var(--ink-500); }
+.kpi-foot { font-size: .82rem; color: var(--ink-700); margin-top: auto; font-weight: 500; }
+.year-pill {
+  display: inline-block;
+  background: var(--green-100);
+  color: var(--green-800);
+  border-radius: 999px;
+  padding: 1px 8px;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .3px;
+}
+.delta-up   { color: var(--red-600); font-weight: 700; }
+.delta-down { color: var(--green-700); font-weight: 700; }
+.delta-flat { color: var(--ink-500); font-weight: 700; }
+
+/* Gauge */
+.gauge { margin-top: auto; }
+.gauge-track {
+  height: 9px;
+  border-radius: 999px;
+  background: #e7efe9;
+  overflow: hidden;
+}
+.gauge-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--green-500), var(--teal-600));
+  transition: width .5s ease;
+}
+.gauge-caption { font-size: .72rem; color: var(--ink-500); margin-top: 4px; }
+
+/* ---------------------------- Panels / charts ---------------------------- */
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.panel-wide { grid-column: 1 / -1; }
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--green-50);
+}
+.panel-head h2 { margin: 0; font-size: 1.02rem; font-weight: 700; color: var(--green-900); }
+.panel-tag {
+  font-size: .72rem;
+  background: var(--green-100);
+  color: var(--green-800);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.panel-body { padding: 18px; }
+
+.chart-box { position: relative; height: 300px; }
+.chart-box-tall { height: 340px; }
+.chart-box canvas { max-height: 100%; }
+
+.chart-state, .table-state {
+  font-size: .9rem;
+  color: var(--ink-500);
+}
+.chart-state {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  text-align: center;
+  background: rgba(255,255,255,.85);
+  z-index: 2;
+}
+.chart-state.show { display: grid; }
+.chart-state.err { color: var(--red-600); }
+.table-state { margin-bottom: 10px; min-height: 1.2em; }
+.table-state.err { color: var(--red-600); }
+
+.spinner {
+  width: 26px; height: 26px;
+  border: 3px solid var(--green-100);
+  border-top-color: var(--green-600);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------------------------- Forms ---------------------------- */
+.form { display: flex; flex-direction: column; gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field label { font-size: .82rem; font-weight: 600; color: var(--ink-700); }
+.field .muted { color: var(--ink-500); font-weight: 400; }
+.field input, .field select {
+  font-family: inherit;
+  font-size: .95rem;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: #fbfdfc;
+  color: var(--ink-900);
+}
+.field input:focus, .field select:focus {
+  outline: none;
+  border-color: var(--green-500);
+  box-shadow: 0 0 0 3px var(--green-100);
+}
+.form-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+.form-result {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: .88rem;
+  line-height: 1.5;
+}
+.form-result.ok { background: var(--green-50); border: 1px solid var(--green-400); color: var(--green-900); }
+.form-result.err { background: #fde8e8; border: 1px solid #f6bcbc; color: var(--red-600); }
+.form-result strong { color: var(--green-800); }
+.form-result .calc-figure { font-size: 1.15rem; font-weight: 700; color: var(--green-800); }
+.form-result .factor-meta { display: block; margin-top: 6px; color: var(--ink-700); }
+
+/* ---------------------------- Tables ---------------------------- */
+.table-wrap { overflow-x: auto; }
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .86rem;
+}
+.data-table th, .data-table td {
+  padding: 9px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.data-table thead th {
+  background: var(--green-50);
+  color: var(--green-900);
+  font-weight: 700;
+  font-size: .74rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  position: sticky;
+  top: 0;
+}
+.data-table td.num, .data-table th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table tbody tr:hover { background: var(--green-50); }
+
+.badge {
+  display: inline-block;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: .72rem;
+  font-weight: 700;
+}
+.badge-s1 { background: #e0f2fe; color: #075985; }
+.badge-s2 { background: var(--green-100); color: var(--green-800); }
+.badge-overridden { background: #fef3c7; color: #92400e; }
+.badge-calc { background: #eef2f0; color: var(--ink-700); }
+
+.btn-mini {
+  border: 1px solid var(--green-500);
+  background: #fff;
+  color: var(--green-700);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-mini:hover { background: var(--green-50); }
+
+.empty-row td { text-align: center; color: var(--ink-500); padding: 22px; }
+
+/* ---------------------------- Modal ---------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 31, 23, .55);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+  padding: 20px;
+}
+.modal {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 60px rgba(0,0,0,.3);
+  width: 100%;
+  max-width: 420px;
+  overflow: hidden;
+}
+.modal-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--green-50);
+}
+.modal-head h3 { margin: 0; font-size: 1.05rem; color: var(--green-900); }
+.modal-close {
+  background: none; border: none; font-size: 1.5rem; line-height: 1;
+  cursor: pointer; color: var(--ink-500);
+}
+.modal form { padding: 18px; }
+.modal-context {
+  margin: 0 0 6px;
+  font-size: .85rem;
+  color: var(--ink-700);
+  background: var(--green-50);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* ---------------------------- Footer ---------------------------- */
+.app-footer {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 18px 28px 30px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--ink-500);
+  font-size: .82rem;
+}
+
+/* ---------------------------- Responsive ---------------------------- */
+@media (max-width: 980px) {
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid, .form-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 560px) {
+  .kpi-grid { grid-template-columns: 1fr; }
+  .field-row { grid-template-columns: 1fr; }
+  .app-header { padding: 14px 16px; }
+  .layout { padding: 16px; }
+  .banner { margin-left: 16px; margin-right: 16px; }
+}

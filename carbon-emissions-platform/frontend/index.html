@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Central Steel Plant &middot; ESG Emissions Dashboard</title>
+  <meta name="description" content="GHG Protocol Scope 1 & 2 carbon accounting dashboard for Central Steel Plant. All figures in kgCO2e." />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <!-- ============================= HEADER ============================= -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true">CO&#8322;e</div>
+      <div class="brand-text">
+        <h1>Central Steel Plant</h1>
+        <p>GHG Protocol &middot; Scope&nbsp;1 &amp; Scope&nbsp;2 Emissions &middot; reported in kgCO&#8322;e</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <label class="year-control" for="yearSelect">
+        <span>Reporting year</span>
+        <select id="yearSelect" aria-label="Reporting year">
+          <option value="2025">2025</option>
+          <option value="2024" selected>2024</option>
+          <option value="2023">2023</option>
+        </select>
+      </label>
+      <button id="refreshBtn" class="btn btn-ghost" type="button" title="Reload all analytics">
+        &#8635; Refresh
+      </button>
+    </div>
+  </header>
+
+  <!-- Global banners -->
+  <div id="globalError" class="banner banner-error" role="alert" hidden></div>
+  <div id="globalLoading" class="banner banner-loading" role="status" hidden>
+    Loading analytics for <span id="loadingYear"></span>&hellip;
+  </div>
+
+  <main class="layout">
+    <!-- ============================= KPI CARDS ============================= -->
+    <section class="kpi-grid" aria-label="Key performance indicators">
+      <article class="kpi-card kpi-primary">
+        <div class="kpi-label">Total Emissions <span class="year-pill" data-year-pill></span></div>
+        <div class="kpi-value" id="kpiTotal">&mdash;</div>
+        <div class="kpi-sub">kgCO&#8322;e &middot; Scope 1 + Scope 2</div>
+        <div class="kpi-foot" id="kpiTotalScopes">&mdash;</div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-label">YoY Change vs <span id="kpiPrevYear">&mdash;</span></div>
+        <div class="kpi-value" id="kpiYoY">&mdash;</div>
+        <div class="kpi-sub">total emissions, year over year</div>
+        <div class="kpi-foot" id="kpiYoYAbs">&mdash;</div>
+      </article>
+
+      <article class="kpi-card kpi-intensity">
+        <div class="kpi-label">Emission Intensity</div>
+        <div class="kpi-value" id="kpiIntensity">&mdash;</div>
+        <div class="kpi-sub" id="kpiIntensityUnit">kgCO&#8322;e per Ton of Steel</div>
+        <div class="gauge" aria-hidden="true">
+          <div class="gauge-track"><div class="gauge-fill" id="intensityGauge"></div></div>
+          <div class="gauge-caption" id="intensityGaugeCaption">vs prior year</div>
+        </div>
+      </article>
+
+      <article class="kpi-card">
+        <div class="kpi-label">Intensity per Employee</div>
+        <div class="kpi-value" id="kpiPerEmployee">&mdash;</div>
+        <div class="kpi-sub">kgCO&#8322;e per Employee</div>
+        <div class="kpi-foot" id="kpiEmployees">&mdash;</div>
+      </article>
+    </section>
+
+    <!-- ============================= CHARTS ============================= -->
+    <section class="chart-grid" aria-label="Emissions charts">
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Year-over-Year Emissions</h2>
+          <span class="panel-tag">Stacked by scope</span>
+        </header>
+        <div class="panel-body chart-box">
+          <div class="chart-state" id="yoyState"></div>
+          <canvas id="yoyChart" aria-label="Year over year stacked bar chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Emission Hotspots</h2>
+          <span class="panel-tag">% by source</span>
+        </header>
+        <div class="panel-body chart-box">
+          <div class="chart-state" id="hotspotState"></div>
+          <canvas id="hotspotChart" aria-label="Emissions by source donut chart"></canvas>
+        </div>
+      </article>
+
+      <article class="panel panel-wide">
+        <header class="panel-head">
+          <h2>Monthly Emissions Trend</h2>
+          <span class="panel-tag" id="trendYearTag">&mdash;</span>
+        </header>
+        <div class="panel-body chart-box chart-box-tall">
+          <div class="chart-state" id="trendState"></div>
+          <canvas id="trendChart" aria-label="Monthly total emissions line chart"></canvas>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============================= FORMS ============================= -->
+    <section class="form-grid" aria-label="Data entry">
+      <!-- (a) Emission record form -->
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Add Emission Record</h2>
+          <span class="panel-tag">Scope 1 / 2</span>
+        </header>
+        <div class="panel-body">
+          <form id="recordForm" class="form" autocomplete="off">
+            <div class="field">
+              <label for="recScope">Scope</label>
+              <select id="recScope" name="scope" required>
+                <option value="1">Scope 1 &middot; Direct combustion / process</option>
+                <option value="2">Scope 2 &middot; Purchased energy</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="recActivity">Activity / Source</label>
+              <select id="recActivity" name="activity" required></select>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="recCategory">Section / Category</label>
+                <input id="recCategory" name="category" type="text" placeholder="e.g. Pellet Plant" />
+              </div>
+              <div class="field">
+                <label for="recUnit">Unit</label>
+                <input id="recUnit" name="unit" type="text" required placeholder="KL / kWh / tonne" />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="recQuantity">Quantity</label>
+                <input id="recQuantity" name="quantity" type="number" step="any" min="0.0001" required placeholder="0.00" />
+              </div>
+              <div class="field">
+                <label for="recDate">Activity date</label>
+                <input id="recDate" name="activity_date" type="date" required />
+              </div>
+            </div>
+            <div class="field">
+              <label for="recFacility">Facility <span class="muted">(optional)</span></label>
+              <input id="recFacility" name="facility" type="text" placeholder="Central Steel Plant" />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" id="recSubmit">Calculate &amp; Save</button>
+            </div>
+            <div class="form-result" id="recordResult" hidden></div>
+          </form>
+        </div>
+      </article>
+
+      <!-- (b) Business metric form -->
+      <article class="panel">
+        <header class="panel-head">
+          <h2>Add Business Metric</h2>
+          <span class="panel-tag">Intensity driver</span>
+        </header>
+        <div class="panel-body">
+          <form id="metricForm" class="form" autocomplete="off">
+            <div class="field">
+              <label for="metName">Metric</label>
+              <select id="metName" name="metric_name" required>
+                <option value="Tons of Steel Produced">Tons of Steel Produced</option>
+                <option value="Number of Employees">Number of Employees</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="metValue">Value</label>
+                <input id="metValue" name="value" type="number" step="any" required placeholder="0" />
+              </div>
+              <div class="field">
+                <label for="metUnit">Unit</label>
+                <input id="metUnit" name="unit" type="text" placeholder="tonne / people" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="metDate">Metric date</label>
+              <input id="metDate" name="metric_date" type="date" required />
+            </div>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit" id="metSubmit">Save Metric</button>
+            </div>
+            <div class="form-result" id="metricResult" hidden></div>
+          </form>
+        </div>
+      </article>
+    </section>
+
+    <!-- ============================= RECORDS TABLE + OVERRIDE ============================= -->
+    <section class="panel panel-wide" aria-label="Records and overrides">
+      <header class="panel-head">
+        <h2>Emission Records</h2>
+        <span class="panel-tag" id="recordsCountTag">&mdash;</span>
+      </header>
+      <div class="panel-body">
+        <div class="table-state" id="recordsState"></div>
+        <div class="table-wrap">
+          <table class="data-table" id="recordsTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Date</th>
+                <th>Scope</th>
+                <th>Activity</th>
+                <th class="num">Qty</th>
+                <th>Unit</th>
+                <th class="num">Factor</th>
+                <th class="num">Final kgCO&#8322;e</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="recordsBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================= AUDIT LOG ============================= -->
+    <section class="panel panel-wide" aria-label="Audit log">
+      <header class="panel-head">
+        <h2>Override Audit Log</h2>
+        <span class="panel-tag">Immutable trail</span>
+      </header>
+      <div class="panel-body">
+        <div class="table-state" id="auditState"></div>
+        <div class="table-wrap">
+          <table class="data-table" id="auditTable">
+            <thead>
+              <tr>
+                <th>When</th>
+                <th>Record</th>
+                <th>Action</th>
+                <th class="num">Old</th>
+                <th class="num">New</th>
+                <th>Reason</th>
+                <th>Changed by</th>
+              </tr>
+            </thead>
+            <tbody id="auditBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <span>Carbon Emissions Reporting Platform &middot; all figures in kgCO&#8322;e</span>
+    <span><a href="/docs" target="_blank" rel="noopener">API docs</a></span>
+  </footer>
+
+  <!-- ============================= OVERRIDE MODAL ============================= -->
+  <div class="modal-backdrop" id="overrideModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="overrideTitle">
+      <header class="modal-head">
+        <h3 id="overrideTitle">Override Record</h3>
+        <button class="modal-close" id="overrideClose" type="button" aria-label="Close">&times;</button>
+      </header>
+      <form id="overrideForm" class="form">
+        <p class="modal-context" id="overrideContext"></p>
+        <div class="field">
+          <label for="ovValue">Override value (kgCO&#8322;e)</label>
+          <input id="ovValue" name="override_value" type="number" step="any" required />
+        </div>
+        <div class="field">
+          <label for="ovReason">Reason</label>
+          <input id="ovReason" name="reason" type="text" required placeholder="e.g. metered correction" />
+        </div>
+        <div class="field">
+          <label for="ovChangedBy">Changed by</label>
+          <input id="ovChangedBy" name="changed_by" type="text" required placeholder="your name" />
+        </div>
+        <div class="form-result" id="overrideResult" hidden></div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" type="button" id="overrideCancel">Cancel</button>
+          <button class="btn btn-primary" type="submit" id="overrideSubmit">Apply Override</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/app.js" defer></script>
+</body>
+</html>

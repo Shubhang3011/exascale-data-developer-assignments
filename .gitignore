@@ -1,0 +1,31 @@
+# --- Original assignment source files (kept locally; deliverables live in the
+#     two project folders, where the data files are already included) ----------
+/Assignment - IIIT NR.pdf
+/GHG Sheet .xlsx
+/Utility_consumption.csv
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.ipynb_checkpoints/
+.pytest_cache/
+
+# --- Databases (generated at runtime) ---
+*.db
+*.sqlite
+*.sqlite3
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- Logs / env ---
+*.log
+.env
+node_modules/
