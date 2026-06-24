@@ -11,6 +11,7 @@ All monetary/quantity columns that represent emissions are stored in
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from sqlalchemy import create_engine
@@ -26,7 +27,11 @@ BACKEND_DIR = APP_DIR.parent                        # .../backend
 PROJECT_ROOT = BACKEND_DIR.parent                   # .../carbon-emissions-platform
 
 DB_PATH = BACKEND_DIR / "emissions.db"
-DATABASE_URL = f"sqlite:///{DB_PATH.as_posix()}"
+# Default to a file next to the backend; allow an external override via
+# DATABASE_URL. On hosts that run the app as a non-root user with a read-only
+# project dir (e.g. Hugging Face Spaces), point this at a writable path, e.g.
+#   DATABASE_URL=sqlite:////tmp/emissions.db
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DB_PATH.as_posix()}")
 
 # ``check_same_thread=False`` is required because FastAPI may access the
 # session from a different thread than the one that created the connection.
