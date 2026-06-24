@@ -6,6 +6,8 @@ Standard**, covering **Scope 1** (direct emissions from owned/controlled sources
 — fuel combustion, industrial processes) and **Scope 2** (indirect emissions
 from purchased energy — grid electricity, imported steam).
 
+![Carbon emissions ESG dashboard](../docs/screenshots/02-carbon-emissions-platform-full.png)
+
 The reference inventory models a heavy-industry emitter, *Central Steel Plant*,
 derived from `data/GHG_Sheet.xlsx`. The platform turns raw activity data
 (litres of diesel, kWh of grid power, tonnes of limestone) into auditable,
@@ -318,6 +320,8 @@ figure is expressed in **kgCO2e**, with no per-row unit ambiguity.
 ---
 
 ## Manual overrides & audit trail
+
+![Override record modal over the emission records table](../docs/screenshots/03-carbon-emissions-override-modal.png)
 
 Sustainability teams occasionally need to correct a computed value (a meter was
 faulty, a supplier issued a restated factor, a one-off adjustment is agreed with

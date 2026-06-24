@@ -11,6 +11,24 @@ backend, frontend, Dockerfile and detailed README.
 
 ---
 
+## Screenshots
+
+**Assignment 1 — Power Demand Forecasting dashboard** (24h/144-block forecast, live weather, localized holidays)
+
+![Power demand forecasting dashboard](docs/screenshots/01-power-demand-forecasting.png)
+
+**Assignment 2 — Carbon Emissions ESG dashboard** (YoY stacked bar, hotspot donut, intensity KPIs, monthly trend)
+
+![Carbon emissions dashboard](docs/screenshots/02-carbon-emissions-platform.png)
+
+**Assignment 2 — Manual override with audit trail** (records table + override modal)
+
+![Carbon emissions override modal](docs/screenshots/03-carbon-emissions-override-modal.png)
+
+> Full-page captures are in [`docs/screenshots/`](docs/screenshots/) (the `*-full.png` files).
+
+---
+
 ## 1. Power Demand Forecasting — [details »](power-demand-forecasting/README.md)
 
 Predicts electricity demand for every **10-minute block of the day (144 blocks / 24 h)** for

@@ -10,6 +10,8 @@ web dashboard.
 The trained model artifact is **committed to the repository**, so the API and
 dashboard work immediately — no retraining required to run the app.
 
+![Power demand forecasting dashboard](../docs/screenshots/01-power-demand-forecasting-full.png)
+
 ---
 
 ## Table of Contents

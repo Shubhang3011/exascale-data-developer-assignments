@@ -182,7 +182,10 @@ def dashboard(hours: int = Query(config.HORIZON_HOURS, ge=1, le=72)) -> dict:
         start_day = _dt.datetime.fromisoformat(start_iso).date()
     else:
         start_day = _dt.date.today()
-    end_day = start_day + _dt.timedelta(days=max(1, (hours + 23) // 24))
+    # Look ahead far enough that the panel always surfaces the next few localized
+    # holidays; the frontend still flags only those inside the forecast window
+    # (and annotates only those on the demand chart).
+    end_day = start_day + _dt.timedelta(days=max(60, (hours + 23) // 24))
     try:
         hol = get_holidays(start_day.isoformat(), end_day.isoformat())
     except Exception:

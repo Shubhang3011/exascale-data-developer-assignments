@@ -364,6 +364,9 @@ a { color: var(--green-700); }
   z-index: 50;
   padding: 20px;
 }
+/* The HTML5 `hidden` attribute must win over the display rule above, otherwise
+   the modal would always be visible (its display:grid overrides [hidden]). */
+.modal-backdrop[hidden] { display: none; }
 .modal {
   background: var(--surface);
   border-radius: var(--radius);
