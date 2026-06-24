@@ -6,6 +6,9 @@ Standard**, covering **Scope 1** (direct emissions from owned/controlled sources
 — fuel combustion, industrial processes) and **Scope 2** (indirect emissions
 from purchased energy — grid electricity, imported steam).
 
+**🔗 Live demo:** https://huggingface.co/spaces/Shubhang3011/carbon-emissions-platform
+*(free Space — first visit may take ~30–60 s to wake from sleep)*
+
 ![Carbon emissions ESG dashboard](../docs/screenshots/02-carbon-emissions-platform-full.png)
 
 The reference inventory models a heavy-industry emitter, *Central Steel Plant*,

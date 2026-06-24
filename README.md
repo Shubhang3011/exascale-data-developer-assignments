@@ -4,6 +4,16 @@ This repository contains both end-to-end prototypes built for the **Data Develop
 two-week sprint. Each assignment lives in its own self-contained folder with its own
 backend, frontend, Dockerfile and detailed README.
 
+## 🔗 Live demos (Hugging Face Spaces)
+
+| Assignment | Live app |
+|------------|----------|
+| 1 · Power Demand Forecasting | **https://huggingface.co/spaces/Shubhang3011/power-demand-forecasting** |
+| 2 · Carbon Emissions Platform | **https://huggingface.co/spaces/Shubhang3011/carbon-emissions-platform** |
+
+> Free Spaces sleep after ~48 h idle — the first visit may take ~30–60 s to wake. The
+> emissions DB is seeded fresh on each start, so the dashboard always has demo data.
+
 | # | Assignment | Folder | Live entry point |
 |---|------------|--------|------------------|
 | 1 | Intelligent Power Demand Forecasting | [`power-demand-forecasting/`](power-demand-forecasting/) | FastAPI + Chart.js dashboard on `:8000` |

@@ -10,6 +10,9 @@ web dashboard.
 The trained model artifact is **committed to the repository**, so the API and
 dashboard work immediately — no retraining required to run the app.
 
+**🔗 Live demo:** https://huggingface.co/spaces/Shubhang3011/power-demand-forecasting
+*(free Space — first visit may take ~30–60 s to wake from sleep)*
+
 ![Power demand forecasting dashboard](../docs/screenshots/01-power-demand-forecasting-full.png)
 
 ---
