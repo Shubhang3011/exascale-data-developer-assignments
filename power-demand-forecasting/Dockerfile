@@ -50,4 +50,7 @@ EXPOSE 8000
 
 # --- Start the server --------------------------------------------------------
 # backend.main:app mounts the dashboard at / and the JSON API under /api.
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Honor $PORT when a platform injects one (Render/Railway/HF Spaces); default to
+# 8000 for local `docker run -p 8000:8000`. `exec` keeps uvicorn as PID 1 so it
+# receives SIGTERM for graceful shutdown.
+CMD ["sh", "-c", "exec uvicorn backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

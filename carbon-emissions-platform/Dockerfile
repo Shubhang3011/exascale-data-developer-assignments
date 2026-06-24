@@ -30,4 +30,7 @@ EXPOSE 8000
 
 # The app creates tables and runs the (idempotent) seed on startup, then serves
 # the dashboard at / and the JSON API at /api/...
-CMD ["uvicorn", "backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Honor $PORT when a platform injects one (Render/Railway/HF Spaces); default to
+# 8000 for local `docker run -p 8000:8000`. `exec` keeps uvicorn as PID 1 so it
+# receives SIGTERM for graceful shutdown.
+CMD ["sh", "-c", "exec uvicorn backend.app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]

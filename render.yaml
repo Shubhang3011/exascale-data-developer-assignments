@@ -1,0 +1,35 @@
+# Render.com Blueprint — deploys BOTH apps as free Docker web services from this
+# monorepo. Each service builds its own subfolder Dockerfile and gets its own URL.
+#
+# How to use:
+#   1. Push this repo to GitHub (already done).
+#   2. Go to https://dashboard.render.com  ->  New +  ->  Blueprint.
+#   3. Connect this repository. Render reads this file and creates both services.
+#   4. Click Apply. First build takes a few minutes; you then get two public URLs.
+#
+# Notes:
+#   - plan: free  -> services sleep after ~15 min idle and cold-start in ~30-60 s.
+#   - The Dockerfiles honor Render's injected $PORT (see their CMD).
+#   - Health checks hit /api/health on each service.
+services:
+  - type: web
+    name: power-demand-forecasting
+    runtime: docker
+    rootDir: power-demand-forecasting
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health
+    autoDeploy: true
+
+  - type: web
+    name: carbon-emissions-platform
+    runtime: docker
+    rootDir: carbon-emissions-platform
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    region: singapore
+    healthCheckPath: /api/health
+    autoDeploy: true
