@@ -1,6 +1,7 @@
 # --- Personal / private — NEVER publish to the submission repo ---------------
 # Interview prep, resume, and research-paper PDFs live locally only.
 /INTERVIEW_PREP.md
+/EDA_CELL_BY_CELL.md
 /*.pdf
 /*.docx
 
