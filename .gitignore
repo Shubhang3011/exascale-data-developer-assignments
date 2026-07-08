@@ -1,3 +1,9 @@
+# --- Personal / private — NEVER publish to the submission repo ---------------
+# Interview prep, resume, and research-paper PDFs live locally only.
+/INTERVIEW_PREP.md
+/*.pdf
+/*.docx
+
 # --- Original assignment source files (kept locally; deliverables live in the
 #     two project folders, where the data files are already included) ----------
 /Assignment - IIIT NR.pdf
