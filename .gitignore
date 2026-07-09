@@ -2,6 +2,7 @@
 # Interview prep, resume, and research-paper PDFs live locally only.
 /INTERVIEW_PREP.md
 /EDA_CELL_BY_CELL.md
+/CLAUDE.md
 /*.pdf
 /*.docx
 
